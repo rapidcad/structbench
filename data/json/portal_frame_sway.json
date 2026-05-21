@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "problem_id": "PORTAL_FRAME_SWAY",
+    "description": "Portal frame (CSG: two columns + top beam) with left base fully fixed and right base as a lateral roller (x free, y+z fixed). Top lateral wind load drives asymmetric sway mode.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "csg",
+    "operations": [
+      {
+        "type": "box",
+        "operation": "add",
+        "params": {"x": 0, "y": 0, "z": 0, "dx": 10, "dy": 10, "dz": 80}
+      },
+      {
+        "type": "box",
+        "operation": "add",
+        "params": {"x": 50, "y": 0, "z": 0, "dx": 10, "dy": 10, "dz": 80}
+      },
+      {
+        "type": "box",
+        "operation": "add",
+        "params": {"x": 0, "y": 0, "z": 75, "dx": 60, "dy": 10, "dz": 10}
+      }
+    ]
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_base",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 10.5,
+        "y_min": -0.5, "y_max": 10.5,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    },
+    {
+      "id": "right_base",
+      "type": "box_3d",
+      "query": {
+        "x_min": 49.5, "x_max": 60.5,
+        "y_min": -0.5, "y_max": 10.5,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    },
+    {
+      "id": "left_column_side",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 0.5,
+        "y_min": -0.5, "y_max": 10.5,
+        "z_min": 0, "z_max": 80
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_base",
+      "region_id": "left_base",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "roller_right_base",
+      "region_id": "right_base",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "wind_lateral",
+      "region_id": "left_column_side",
+      "type": "distributed_force",
+      "direction": "x",
+      "magnitude_newtons": 8000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

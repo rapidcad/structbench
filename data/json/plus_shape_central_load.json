@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "problem_id": "PLUS_SHAPE_CENTRAL_LOAD",
+    "description": "Plus/cross-shaped domain with horizontal arm tips fixed and a central downward load on the vertical stem. Tests topology in a symmetric cross geometry with four-arm design freedom.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "plus",
+    "params": {
+      "width": 100,
+      "height": 100,
+      "depth": 25,
+      "arm_width": 30
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_arm_fix",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 1.0,
+        "y_min": 0, "y_max": 25,
+        "z_min": 35, "z_max": 65
+      }
+    },
+    {
+      "id": "right_arm_fix",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99.0, "x_max": 100.5,
+        "y_min": 0, "y_max": 25,
+        "z_min": 35, "z_max": 65
+      }
+    },
+    {
+      "id": "center_load",
+      "type": "box_3d",
+      "query": {
+        "x_min": 35, "x_max": 65,
+        "y_min": 0, "y_max": 25,
+        "z_min": 47, "z_max": 53
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_arm",
+      "region_id": "left_arm_fix",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_right_arm",
+      "region_id": "right_arm_fix",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "center_downward",
+      "region_id": "center_load",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 6000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

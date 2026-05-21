@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "problem_id": "CYLINDER_MAST_GRAVITY_WIND",
+    "description": "Cylindrical mast domain fixed at base, under combined gravity self-weight and lateral wind distributed force. Tests topology under biaxial loading on a non-box domain.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "cylinder",
+    "params": {
+      "radius": 20,
+      "height": 150,
+      "center": [0, 0, 0],
+      "axis": "z"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -20, "x_max": 20,
+        "y_min": -20, "y_max": 20,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    },
+    {
+      "id": "wind_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -20, "x_max": 20,
+        "y_min": 18, "y_max": 21,
+        "z_min": 0, "z_max": 150
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_base",
+      "region_id": "base_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "self_weight",
+      "type": "gravity",
+      "direction": "-z",
+      "magnitude_ms2": 9810.0
+    },
+    {
+      "name": "wind_load",
+      "region_id": "wind_face",
+      "type": "distributed_force",
+      "direction": "-y",
+      "magnitude_newtons": 4000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

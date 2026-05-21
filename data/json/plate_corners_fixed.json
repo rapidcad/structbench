@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "problem_id": "PLATE_CORNERS_FIXED",
+    "description": "Square plate fixed at four corners with pressure load.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 100.0,
+      "z_min": 0.0, "z_max": 2.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "corner_1",
+      "type": "box_3d", 
+      "query": {"x_min": -0.2, "x_max": 2.0, "y_min": -0.2, "y_max": 2.0, "z_min": -0.2, "z_max": 2.2}
+    },
+    {
+      "id": "corner_2",
+      "type": "box_3d",
+      "query": {"x_min": 98.0, "x_max": 100.2, "y_min": -0.2, "y_max": 2.0, "z_min": -0.2, "z_max": 2.2}
+    },
+    {
+      "id": "corner_3",
+      "type": "box_3d",
+      "query": {"x_min": 98.0, "x_max": 100.2, "y_min": 98.0, "y_max": 100.2, "z_min": -0.2, "z_max": 2.2}
+    },
+    {
+      "id": "corner_4",
+      "type": "box_3d",
+      "query": {"x_min": -0.2, "x_max": 2.0, "y_min": 98.0, "y_max": 100.2, "z_min": -0.2, "z_max": 2.2}
+    },
+    {
+      "id": "face_top",
+      "type": "box_3d",
+      "query": {"z_min": 1.98, "z_max": 2.02}
+    }
+  ],
+  "boundary_conditions": [
+    {"name": "fix_c1", "region_id": "corner_1", "type": "fixed_displacement"},
+    {"name": "fix_c2", "region_id": "corner_2", "type": "fixed_displacement"},
+    {"name": "fix_c3", "region_id": "corner_3", "type": "fixed_displacement"},
+    {"name": "fix_c4", "region_id": "corner_4", "type": "fixed_displacement"}
+  ],
+  "loads": [
+    {
+      "name": "pressure_top",
+      "region_id": "face_top",
+      "type": "distributed_force",
+      "magnitude_newtons": -10000.0,
+      "direction": "z"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

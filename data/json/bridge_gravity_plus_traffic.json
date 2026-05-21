@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "problem_id": "BRIDGE_GRAVITY_PLUS_TRAFFIC",
+    "description": "Bridge span with gravity self-weight combined with traffic deck load. Left end fixed, right end expansion roller (x free). Tests combined body-force and surface load.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 20.0,
+      "z_min": 0.0, "z_max": 30.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "support_left",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 5.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 1.0
+      }
+    },
+    {
+      "id": "support_right",
+      "type": "box_3d",
+      "query": {
+        "x_min": 95.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 1.0
+      }
+    },
+    {
+      "id": "deck_surface",
+      "type": "box_3d",
+      "query": {
+        "x_min": 5.0, "x_max": 95.0,
+        "y_min": 5.0, "y_max": 15.0,
+        "z_min": 10.0, "z_max": 11.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left",
+      "region_id": "support_left",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "roller_right",
+      "region_id": "support_right",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "self_weight",
+      "type": "gravity",
+      "direction": "-z",
+      "magnitude_ms2": 9810.0
+    },
+    {
+      "name": "traffic_load",
+      "region_id": "deck_surface",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 15000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

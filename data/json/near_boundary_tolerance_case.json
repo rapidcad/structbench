@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "problem_id": "NEAR_BOUNDARY_TOLERANCE_CASE",
+    "description": "Benchmark with selectors hugging boundaries to test geometric tolerance handling.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 10.0,
+      "z_min": 0.0, "z_max": 10.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_eps",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.001, "x_max": 0.001,
+        "y_min": -0.001, "y_max": 10.001,
+        "z_min": -0.001, "z_max": 10.001
+      }
+    },
+    {
+      "id": "right_eps",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99.999, "x_max": 100.001,
+        "y_min": -0.001, "y_max": 10.001,
+        "z_min": -0.001, "z_max": 10.001
+      }
+    },
+    {
+      "id": "top_eps",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.001, "x_max": 100.001,
+        "y_min": -0.001, "y_max": 10.001,
+        "z_min": 9.999, "z_max": 10.001
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_eps",
+      "region_id": "left_eps",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_right_eps",
+      "region_id": "right_eps",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "top_eps_load",
+      "region_id": "top_eps",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 10000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

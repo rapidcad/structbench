@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "problem_id": "T_BEAM_ROLLER_RIGHT_SUPPORT",
+    "description": "T-beam with left end pinned (all DOF) and right end roller (x free, y+z fixed). Distributed load on top cap. T-shape domain with asymmetric end conditions.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "t_shape",
+    "params": {
+      "width": 60,
+      "height": 30,
+      "depth": 100,
+      "stem_width": 12,
+      "cap_height": 6
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_support",
+      "type": "box_3d",
+      "query": {
+        "x_min": 20, "x_max": 40,
+        "y_min": -0.2, "y_max": 2,
+        "z_min": 0, "z_max": 24
+      }
+    },
+    {
+      "id": "right_support",
+      "type": "box_3d",
+      "query": {
+        "x_min": 20, "x_max": 40,
+        "y_min": 98, "y_max": 102,
+        "z_min": 0, "z_max": 24
+      }
+    },
+    {
+      "id": "top_cap_load",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0, "x_max": 60,
+        "y_min": 45, "y_max": 55,
+        "z_min": 28, "z_max": 31
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "pin_left",
+      "region_id": "left_support",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "roller_right",
+      "region_id": "right_support",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "cap_distributed_load",
+      "region_id": "top_cap_load",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 10000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

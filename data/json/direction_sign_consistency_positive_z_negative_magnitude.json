@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "problem_id": "DIRECTION_SIGN_CONSISTENCY_POS_Z_NEG_MAG",
+    "description": "Sign-convention benchmark using positive direction with negative magnitude.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 10.0,
+      "z_min": 0.0, "z_max": 10.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "face_left",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.01, "x_max": 0.01,
+        "y_min": 0.0, "y_max": 10.0,
+        "z_min": 0.0, "z_max": 10.0
+      }
+    },
+    {
+      "id": "face_right",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99.99, "x_max": 100.01,
+        "y_min": 0.0, "y_max": 10.0,
+        "z_min": 0.0, "z_max": 10.0
+      }
+    },
+    {
+      "id": "face_top",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 10.0,
+        "z_min": 9.99, "z_max": 10.01
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left",
+      "region_id": "face_left",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_right",
+      "region_id": "face_right",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "distributed_load_top",
+      "region_id": "face_top",
+      "type": "distributed_force",
+      "direction": "z",
+      "magnitude_newtons": -10000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

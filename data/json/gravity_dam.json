@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "problem_id": "GRAVITY_DAM",
+    "description": "Gravity Dam / Retaining Wall with hydrostatic pressure varying linearly with depth.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 66.6667,
+      "y_min": 0.0, "y_max": 66.6667,
+      "z_min": 0.0, "z_max": 100.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_rock",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 66.6667,
+        "y_min": 0.0, "y_max": 66.6667,
+        "z_min": 0.0, "z_max": 0.3333
+      }
+    },
+    {
+      "id": "upstream_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 66.6667,
+        "y_min": 66.3333, "y_max": 66.7,
+        "z_min": 0.0, "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_bedrock",
+      "region_id": "base_rock",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "hydrostatic_pressure",
+      "region_id": "upstream_face",
+      "type": "linear_distributed_force",
+      "description": "Pressure increases linearly from 0 at top (z=100) to max at bottom (z=0).",
+      "magnitude_newtons": -90000.0,
+      "direction": "y",
+      "gradient_axis": "z",
+      "gradient_profile": "triangular_invert"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 25000,
+    "poissons_ratio": 0.2,
+    "density_g_cm3": 2.4
+  }
+}

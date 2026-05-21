@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "problem_id": "CANTILEVER_BRIDGE_WITH_MID_PROP",
+    "description": "Cantilever bridge fixed at left wall with an additional mid-span prop support.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 20.0,
+      "z_min": 0.0, "z_max": 60.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "support_wall_left",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 1.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 60.0
+      }
+    },
+    {
+      "id": "support_mid_prop",
+      "type": "box_3d",
+      "query": {
+        "x_min": 49.0, "x_max": 51.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 2.0
+      }
+    },
+    {
+      "id": "deck_surface",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 5.0, "y_max": 15.0,
+        "z_min": 20.0, "z_max": 21.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_wall",
+      "region_id": "support_wall_left",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_mid_prop",
+      "region_id": "support_mid_prop",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "traffic_load",
+      "region_id": "deck_surface",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 20000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "problem_id": "L_BRACKET_GRAVITY_TIP_LOAD",
+    "description": "Aluminium L-bracket wall-mounted with gravity self-weight plus a downward tip force. Complex L-shaped domain tests optimizer under combined self-weight and service load.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "l_shape",
+    "params": {
+      "width": 100,
+      "height": 100,
+      "depth": 25,
+      "leg_width": 40,
+      "base_height": 30
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "wall_mount",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 2.5,
+        "y_min": 0, "y_max": 25,
+        "z_min": 0, "z_max": 100
+      }
+    },
+    {
+      "id": "tip_region",
+      "type": "box_3d",
+      "query": {
+        "x_min": 90, "x_max": 100.5,
+        "y_min": 10, "y_max": 15,
+        "z_min": 14, "z_max": 16
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_wall",
+      "region_id": "wall_mount",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "self_weight",
+      "type": "gravity",
+      "direction": "-z",
+      "magnitude_ms2": 9810.0
+    },
+    {
+      "name": "tip_force",
+      "region_id": "tip_region",
+      "type": "point_force",
+      "direction": "-z",
+      "magnitude_newtons": 2000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 70000,
+    "poissons_ratio": 0.33,
+    "density_g_cm3": 2.7
+  }
+}

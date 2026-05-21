@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "problem_id": "CRANE_HOOK",
+    "description": "J-shaped crane hook analyzed for stress concentrations at the saddle.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "step",
+    "bounds": {
+      "x_min": -23.0769,
+      "x_max": 23.076900000000002,
+      "y_min": -23.0769,
+      "y_max": 61.5385,
+      "z_min": 0.0,
+      "z_max": 7.6923
+    },
+    "params": {
+      "step_path": "../step/crane_hook.step"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "shank_top",
+      "type": "box_3d",
+      "query": {
+        "x_min": -23.0769,
+        "x_max": -7.6923,
+        "y_min": 60.0,
+        "y_max": 61.5385,
+        "z_min": 0,
+        "z_max": 7.6923
+      }
+    },
+    {
+      "id": "saddle_point",
+      "type": "box_3d",
+      "query": {
+        "x_min": -3.0769,
+        "x_max": 3.0769,
+        "y_min": -8.4615,
+        "y_max": -6.9231,
+        "z_min": 0,
+        "z_max": 7.6923
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_shank",
+      "region_id": "shank_top",
+      "type": "fixed_displacement",
+      "dof_lock": {
+        "x": true,
+        "y": true,
+        "z": true
+      }
+    }
+  ],
+  "loads": [
+    {
+      "name": "lift_load",
+      "region_id": "saddle_point",
+      "type": "distributed_force",
+      "magnitude_newtons": -50000.0,
+      "direction": "y"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

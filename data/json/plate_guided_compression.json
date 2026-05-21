@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "problem_id": "PLATE_GUIDED_COMPRESSION",
+    "description": "Flat plate with all four lateral edges constrained only in z (guided: x and y free, z locked). Top face axial compression. Models a plate under buckling-precursor conditions where edges can slide in-plane.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 100.0,
+      "z_min": 0.0, "z_max": 15.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "edge_neg_x",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 0.5,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 0.0, "z_max": 15.0
+      }
+    },
+    {
+      "id": "edge_pos_x",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99.5, "x_max": 100.5,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 0.0, "z_max": 15.0
+      }
+    },
+    {
+      "id": "edge_neg_y",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": -0.5, "y_max": 0.5,
+        "z_min": 0.0, "z_max": 15.0
+      }
+    },
+    {
+      "id": "edge_pos_y",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 99.5, "y_max": 100.5,
+        "z_min": 0.0, "z_max": 15.0
+      }
+    },
+    {
+      "id": "top_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 13.5, "z_max": 15.5
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "guided_edge_neg_x",
+      "region_id": "edge_neg_x",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": false, "z": true}
+    },
+    {
+      "name": "guided_edge_pos_x",
+      "region_id": "edge_pos_x",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": false, "z": true}
+    },
+    {
+      "name": "guided_edge_neg_y",
+      "region_id": "edge_neg_y",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": false, "z": true}
+    },
+    {
+      "name": "guided_edge_pos_y",
+      "region_id": "edge_pos_y",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": false, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "axial_compression",
+      "region_id": "top_face",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 30000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

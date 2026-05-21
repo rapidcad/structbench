@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "problem_id": "CSG_BRACKET_LATERAL_ROLLER",
+    "description": "Single-hole bracket STEP geometry where the wall mount is a lateral roller (x+z fixed, y free — can slide along the bracket depth). Bolt hole loaded downward. Tests topology under a non-fully-fixed wall condition.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "step",
+    "bounds": {
+      "x_min": 0.0,
+      "x_max": 90.9091,
+      "y_min": 0.0,
+      "y_max": 48.4848,
+      "z_min": 0.0,
+      "z_max": 24.2424
+    },
+    "params": {
+      "step_path": "../step/csg_bracket_with_hole.step"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "wall_roller",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.6061,
+        "x_max": 3.0303,
+        "y_min": 0.0,
+        "y_max": 48.4848,
+        "z_min": 0.0,
+        "z_max": 24.2424
+      }
+    },
+    {
+      "id": "hole_edge",
+      "type": "box_3d",
+      "query": {
+        "x_min": 60.6061,
+        "x_max": 84.8485,
+        "y_min": 15.1515,
+        "y_max": 33.3333,
+        "z_min": 21.2121,
+        "z_max": 27.2727
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "lateral_roller_wall",
+      "region_id": "wall_roller",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": false, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "bolt_load",
+      "region_id": "hole_edge",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 5000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

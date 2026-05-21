@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "problem_id": "BEAM_CANTILEVER_TORQUE_COUPLE_Z",
+    "description": "100x10x10mm cantilever beam, fixed at left end, applied torque about z-axis via force couple at free end. Clockwise rotation (cw).",
+    "analysis_type": "3d",
+    "thickness_mm": null,
+    "source_step": null
+  },
+  "design_domain": {
+    "shape_type": "box",
+    "bounds": {
+      "x_min": 0,
+      "x_max": 100,
+      "y_min": -5,
+      "y_max": 5,
+      "z_min": -5,
+      "z_max": 5
+    },
+    "params": {
+      "dx": 100,
+      "dy": 10,
+      "dz": 10
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_end",
+      "type": "box_3d",
+      "query": {
+        "x_min": -1,
+        "x_max": 1,
+        "y_min": -6,
+        "y_max": 6,
+        "z_min": -6,
+        "z_max": 6
+      }
+    },
+    {
+      "id": "right_end",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99,
+        "x_max": 101,
+        "y_min": -6,
+        "y_max": 6,
+        "z_min": -6,
+        "z_max": 6
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_left_end",
+      "type": "fixed_displacement",
+      "region_id": "left_end",
+      "dof_lock": {
+        "x": true,
+        "y": true,
+        "z": true
+      }
+    }
+  ],
+  "loads": [
+    {
+      "name": "torque_z_axis",
+      "type": "moment",
+      "center": [100, 0, 0],
+      "axis": "z",
+      "radius": 5,
+      "magnitude_nm": 50000,
+      "direction": "cw"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 200000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85,
+    "yield_strength_mpa": 250
+  },
+  "notes": "Torsional loading benchmark: cantilever beam with applied torque at free end. Tests solver handling of moment loads and torsional stiffness. Torque magnitude: 50 N·m. Radius (cross-section) used for force couple distribution: 5 mm."
+}

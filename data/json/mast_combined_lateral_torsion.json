@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "problem_id": "MAST_COMBINED_LATERAL_TORSION",
+    "description": "Vertical mast with combined lateral wind load and torsion (antenna twisting + wind). Tests complex multi-axis loading: bending + torsion + axial stress coupling.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": -5.0, "x_max": 5.0,
+      "y_min": -5.0, "y_max": 5.0,
+      "z_min": 0.0, "z_max": 100.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_plate",
+      "type": "box_3d",
+      "query": {
+        "x_min": -5.0, "x_max": 5.0,
+        "y_min": -5.0, "y_max": 5.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    },
+    {
+      "id": "top_section",
+      "type": "box_3d",
+      "query": {
+        "x_min": -5.0, "x_max": 5.0,
+        "y_min": -5.0, "y_max": 5.0,
+        "z_min": 99.5, "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_base",
+      "region_id": "base_plate",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "lateral_wind",
+      "region_id": "top_section",
+      "type": "distributed_force",
+      "magnitude_newtons": 3000.0,
+      "direction": "x"
+    },
+    {
+      "name": "antenna_twist",
+      "type": "moment",
+      "center": [0, 0, 100],
+      "axis": "z",
+      "radius": 5.0,
+      "magnitude_nm": 25000,
+      "direction": "ccw"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Complex multi-axis loading: lateral wind (3 kN, x-direction) combined with counter-clockwise torsion (25 N·m about z-axis) at mast top. Tests coupling of bending and torsional stiffness. Von Mises stresses should be higher than pure bending or torsion alone due to stress superposition."
+}

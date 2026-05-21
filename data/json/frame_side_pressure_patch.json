@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "problem_id": "FRAME_SIDE_PRESSURE_PATCH",
+    "description": "Portal frame with partial side pressure patch instead of full face. Pressure applied only to upper 40mm of 100mm height. Tests localized pressure selector and non-uniform load distribution.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "step",
+    "bounds": {
+      "x_min": 0.0,
+      "x_max": 66.6667,
+      "y_min": 0.0,
+      "y_max": 6.6667,
+      "z_min": 0.0,
+      "z_max": 100.0
+    },
+    "params": {
+      "step_path": "../step/frame_side_pressure_patch.step"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_foundations",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0,
+        "x_max": 66.6667,
+        "y_min": 0.0,
+        "y_max": 6.6667,
+        "z_min": 0.0,
+        "z_max": 0.3333
+      }
+    },
+    {
+      "id": "face_front_upper",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0,
+        "x_max": 66.6667,
+        "y_min": 6.6333,
+        "y_max": 6.7,
+        "z_min": 60.0,
+        "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_bases",
+      "region_id": "base_foundations",
+      "type": "fixed_displacement",
+      "dof_lock": {
+        "x": true,
+        "y": true,
+        "z": true
+      }
+    }
+  ],
+  "loads": [
+    {
+      "name": "lateral_pressure_patch",
+      "region_id": "face_front_upper",
+      "type": "distributed_force",
+      "magnitude_newtons": -30000.0,
+      "direction": "y"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Localized pressure variant: pressure applied only to upper 40mm of 100mm frame height (z: 60-100mm). Tests selective load region definitions and non-uniform stress distributions on frame structures."
+}

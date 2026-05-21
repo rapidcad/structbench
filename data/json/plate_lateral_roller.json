@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "problem_id": "PLATE_LATERAL_ROLLER",
+    "description": "Box beam with one face fully fixed and the far face as a lateral roller (y free, x+z fixed). Vertical distributed load on top. The roller allows axial elongation at the free end.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 20.0,
+      "z_min": 0.0, "z_max": 30.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "fixed_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 1.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 30.0
+      }
+    },
+    {
+      "id": "roller_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": 99.0, "x_max": 100.5,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 30.0
+      }
+    },
+    {
+      "id": "top_load",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 5.0, "y_max": 15.0,
+        "z_min": 28.5, "z_max": 31.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_face",
+      "region_id": "fixed_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "lateral_roller_right",
+      "region_id": "roller_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": false, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "top_distributed_load",
+      "region_id": "top_load",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 12000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

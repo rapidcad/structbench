@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "problem_id": "A_FRAME_OFF_APEX_LATERAL",
+    "description": "A-frame with off-center apex load and unequal support widths. Left support base 30mm, right support base 70mm. Lateral load applied 15mm offset from apex. Tests asymmetry and selector precision on slender structures.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 100.0,
+      "z_min": 0.0, "z_max": 100.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_plate",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    },
+    {
+      "id": "left_support",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 30.0,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    },
+    {
+      "id": "right_support",
+      "type": "box_3d",
+      "query": {
+        "x_min": 70.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 100.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    },
+    {
+      "id": "off_apex",
+      "type": "box_3d",
+      "query": {
+        "x_min": 64.0, "x_max": 66.0,
+        "y_min": 49.0, "y_max": 51.0,
+        "z_min": 99.0, "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "left_support_fixed",
+      "region_id": "left_support",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "right_support_fixed",
+      "region_id": "right_support",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "off_apex_lateral",
+      "region_id": "off_apex",
+      "type": "point_force",
+      "magnitude_newtons": 15000.0,
+      "direction": "y"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Asymmetric A-frame variant: unequal support widths (left 30mm, right 70mm) with off-center apex load. Tests selector precision on non-symmetric topologies and bending/torsion coupling."
+}

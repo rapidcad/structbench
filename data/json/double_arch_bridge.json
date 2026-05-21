@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "problem_id": "DOUBLE_ARCH_BRIDGE",
+    "description": "Long bridge span supported at ends and center with distributed load on the deck surface, resulting in a double-arch structure.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 20.0,
+      "z_min": 0.0, "z_max": 30.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "support_left",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 5.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 1.0
+      }
+    },
+    {
+      "id": "support_right",
+      "type": "box_3d",
+      "query": {
+        "x_min": 95.0, "x_max": 100.0,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 1.0
+      }
+    },
+    {
+      "id": "support_center",
+      "type": "box_3d",
+      "query": {
+        "x_min": 47.5, "x_max": 52.5,
+        "y_min": 0.0, "y_max": 20.0,
+        "z_min": 0.0, "z_max": 1.0
+      }
+    },
+    {
+      "id": "deck_surface",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 100.0,
+        "y_min": 5.0, "y_max": 15.0,
+        "z_min": 10.0, "z_max": 11.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left",
+      "region_id": "support_left",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_right",
+      "region_id": "support_right",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "fix_center",
+      "region_id": "support_center",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "traffic_load",
+      "region_id": "deck_surface",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 20000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

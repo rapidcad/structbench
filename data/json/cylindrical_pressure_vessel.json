@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "problem_id": "CYLINDRICAL_PRESSURE_VESSEL",
+    "description": "Cylindrical pressure vessel with internal pressure and fixed ends.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "cylinder",
+    "params": {
+      "radius": 33.3333,
+      "height": 100,
+      "center": [0, 0, 0],
+      "axis": "z"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "bottom_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -33.3333, "x_max": 33.3333,
+        "y_min": -33.3333, "y_max": 33.3333,
+        "z_min": -0.3333, "z_max": 0.3333
+      }
+    },
+    {
+      "id": "top_center",
+      "type": "box_3d",
+      "query": {
+        "x_min": -6.6667, "x_max": 6.6667,
+        "y_min": -6.6667, "y_max": 6.6667,
+        "z_min": 98.3333, "z_max": 101.6667
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_bottom",
+      "region_id": "bottom_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "axial_load",
+      "region_id": "top_center",
+      "type": "point_force",
+      "direction": "-z",
+      "magnitude_newtons": 10000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

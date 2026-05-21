@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "problem_id": "FRAME_BASE_MOMENT",
+    "description": "Portal frame with overturning moment applied at base via force couple. Simulates extreme wind moment on tall frame. Tests moment load application on composite structures.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "step",
+    "bounds": {
+      "x_min": 0.0,
+      "x_max": 66.6667,
+      "y_min": 0.0,
+      "y_max": 6.6667,
+      "z_min": 0.0,
+      "z_max": 100.0
+    },
+    "params": {
+      "step_path": "../step/frame_base_moment.step"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_foundations",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0,
+        "x_max": 66.6667,
+        "y_min": 0.0,
+        "y_max": 6.6667,
+        "z_min": 0.0,
+        "z_max": 0.3333
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_bases",
+      "region_id": "base_foundations",
+      "type": "fixed_displacement",
+      "dof_lock": {
+        "x": true,
+        "y": true,
+        "z": true
+      }
+    }
+  ],
+  "loads": [
+    {
+      "name": "overturning_moment_base",
+      "type": "moment",
+      "center": [
+        33.33,
+        3.33,
+        0.25
+      ],
+      "axis": "y",
+      "radius": 33.33,
+      "magnitude_nm": 100000,
+      "direction": "cw"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Overturning moment at base: 100 N\u00b7m moment applied about y-axis at frame base center via force couple (radius 33.33mm). Simulates extreme wind moment creating tension on one side and compression on other. Tests moment load on composite frame structure with multiple load paths."
+}

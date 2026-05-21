@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "problem_id": "CYLINDER_X_AXIS_END_CAP_PRESSURE",
+    "description": "Horizontal cylinder aligned on x-axis, fixed at left face, outward pressure on right circular end face.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "cylinder",
+    "params": {
+      "radius": 25.0,
+      "height": 100,
+      "center": [0, 0, 0],
+      "axis": "x"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 0.5,
+        "y_min": -25.5, "y_max": 25.5,
+        "z_min": -25.5, "z_max": 25.5
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_face",
+      "region_id": "left_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "right_face_outward_pressure",
+      "type": "pressure",
+      "center": [100, 0, 0],
+      "radius": 25.0,
+      "pressure_mpa": 10.0,
+      "direction": "outward",
+      "normal_axis": "x"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

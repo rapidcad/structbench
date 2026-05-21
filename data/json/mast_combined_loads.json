@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "problem_id": "MAST_COMBINED_LOADS",
+    "description": "Vertical mast with combined top-mounted loads: point load (axial) and side distributed load. Simulates antenna with wind + gravity. Tests multi-axis loading on slender cantilever.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": -5.0, "x_max": 5.0,
+      "y_min": -5.0, "y_max": 5.0,
+      "z_min": 0.0, "z_max": 100.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_plate",
+      "type": "box_3d",
+      "query": {
+        "x_min": -5.0, "x_max": 5.0,
+        "y_min": -5.0, "y_max": 5.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    },
+    {
+      "id": "top_section",
+      "type": "box_3d",
+      "query": {
+        "x_min": -5.0, "x_max": 5.0,
+        "y_min": -5.0, "y_max": 5.0,
+        "z_min": 99.5, "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_base",
+      "region_id": "base_plate",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "lateral_wind_load",
+      "region_id": "top_section",
+      "type": "distributed_force",
+      "magnitude_newtons": 2000.0,
+      "direction": "x"
+    },
+    {
+      "name": "axial_antenna_weight",
+      "region_id": "top_section",
+      "type": "distributed_force",
+      "magnitude_newtons": 5000.0,
+      "direction": "-z"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Combined loading benchmark: vertical mast with simultaneous lateral wind load (2 kN, x-direction) and axial antenna weight (5 kN, -z direction) at top. Tests multi-axis stress coupling on slender cantilever structures."
+}

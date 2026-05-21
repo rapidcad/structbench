@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "problem_id": "FRAME_SLIDING_BASE",
+    "description": "Portal frame STEP geometry with split base constraints: left base fully fixed, right base is a lateral roller (x free, y+z fixed). Lateral wind pressure applied to front face. Sliding base allows horizontal thermal expansion while resisting uplift.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "step",
+    "bounds": {
+      "x_min": 0.0,
+      "x_max": 66.6667,
+      "y_min": 0.0,
+      "y_max": 6.6667,
+      "z_min": 0.0,
+      "z_max": 100.0
+    },
+    "params": {
+      "step_path": "../step/frame_side_pressure.step"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "left_base",
+      "type": "box_3d",
+      "query": {
+        "x_min": -0.5, "x_max": 15.0,
+        "y_min": 0.0, "y_max": 6.6667,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    },
+    {
+      "id": "right_base",
+      "type": "box_3d",
+      "query": {
+        "x_min": 52.0, "x_max": 67.0,
+        "y_min": 0.0, "y_max": 6.6667,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    },
+    {
+      "id": "front_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0.0, "x_max": 66.6667,
+        "y_min": 6.6333, "y_max": 6.7,
+        "z_min": 0.0, "z_max": 100.0
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_left_base",
+      "region_id": "left_base",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    },
+    {
+      "name": "roller_right_base",
+      "region_id": "right_base",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": false, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "lateral_wind",
+      "region_id": "front_face",
+      "type": "distributed_force",
+      "direction": "-y",
+      "magnitude_newtons": 20000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

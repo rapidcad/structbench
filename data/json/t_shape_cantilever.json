@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "problem_id": "T_SHAPE_CANTILEVER",
+    "description": "T-shaped domain as a cantilever beam: one full face fixed (y=0), opposite end loaded downward. The T cross-section provides efficient moment of inertia for cantilever bending.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "t_shape",
+    "params": {
+      "width": 60,
+      "height": 30,
+      "depth": 120,
+      "stem_width": 12,
+      "cap_height": 6
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "fixed_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0, "x_max": 60,
+        "y_min": -0.3, "y_max": 2.0,
+        "z_min": 0, "z_max": 30
+      }
+    },
+    {
+      "id": "free_end_load",
+      "type": "box_3d",
+      "query": {
+        "x_min": 0, "x_max": 60,
+        "y_min": 118, "y_max": 122,
+        "z_min": 0, "z_max": 30
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_wall",
+      "region_id": "fixed_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "tip_force",
+      "region_id": "free_end_load",
+      "type": "distributed_force",
+      "direction": "-z",
+      "magnitude_newtons": 8000.0
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

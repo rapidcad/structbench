@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "problem_id": "CYLINDER_END_CAP_INWARD_COMPRESSION",
+    "description": "Cylinder fixed at base, inward (compressive) radial pressure on top end face simulating die or punch contact.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "shape_type": "cylinder",
+    "params": {
+      "radius": 33.3333,
+      "height": 100,
+      "center": [0, 0, 0],
+      "axis": "z"
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "bottom_face",
+      "type": "box_3d",
+      "query": {
+        "x_min": -33.4, "x_max": 33.4,
+        "y_min": -33.4, "y_max": 33.4,
+        "z_min": -0.5, "z_max": 0.5
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fix_bottom",
+      "region_id": "bottom_face",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "top_face_inward_pressure",
+      "type": "pressure",
+      "center": [0, 0, 100],
+      "radius": 33.3333,
+      "pressure_mpa": 10.0,
+      "direction": "inward",
+      "normal_axis": "z"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

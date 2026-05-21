@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "problem_id": "CANTILEVER_2D_BENCHMARK",
+    "description": "Standard 100x20mm beam fixed at left, load at top right.",
+    "analysis_type": "plane_stress",
+    "thickness_mm": 5.0
+  },
+
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": 0.0, "x_max": 100.0,
+      "y_min": 0.0, "y_max": 20.0,
+      "z_min": 0.0, "z_max": 20.0
+    }
+  },
+
+  "spatial_selectors": [
+    {
+      "id": "region_wall_left",
+      "type": "box_2d",
+      "query": {
+        "x_min": -0.01, "x_max": 0.01,
+        "y_min": 0.0,  "y_max": 2.0
+      }
+    },
+    {
+      "id": "region_tip_upper",
+      "type": "box_2d",
+      "query": {
+        "x_min": 9.99, "x_max": 10.01,
+        "y_min": 1.99, "y_max": 2.01
+      }
+    }
+  ],
+
+  "boundary_conditions": [
+    {
+      "name": "fix_left_side",
+      "region_id": "region_wall_left",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true}
+    }
+  ],
+
+  "loads": [
+    {
+      "name": "push_down_tip",
+      "selector": {
+        "type": "box_2d",
+          "query": {
+            "x": 99.9,
+            "y": 10,
+            "z": 10
+          }
+      },
+      "type": "point_force",
+      "direction": "z",
+      "distribution": "divide_by_node_count",
+      "magnitude_newtons": -1000.0
+    }
+  ],
+
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "problem_id": "MAST_ANTENNA_TORSION",
+    "description": "Vertical mast with torque applied at top (antenna twisting). Simulates rotational wind/vibration loads on communication towers. Tests torsional stiffness and stress in slender cantilevers.",
+    "analysis_type": "3d"
+  },
+  "design_domain": {
+    "units": "mm",
+    "bounds": {
+      "x_min": -5.0, "x_max": 5.0,
+      "y_min": -5.0, "y_max": 5.0,
+      "z_min": 0.0, "z_max": 100.0
+    }
+  },
+  "spatial_selectors": [
+    {
+      "id": "base_plate",
+      "type": "box_3d",
+      "query": {
+        "x_min": -5.0, "x_max": 5.0,
+        "y_min": -5.0, "y_max": 5.0,
+        "z_min": 0.0, "z_max": 0.5
+      }
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "name": "fixed_base",
+      "region_id": "base_plate",
+      "type": "fixed_displacement",
+      "dof_lock": {"x": true, "y": true, "z": true}
+    }
+  ],
+  "loads": [
+    {
+      "name": "antenna_torque",
+      "type": "moment",
+      "center": [0, 0, 100],
+      "axis": "z",
+      "radius": 5.0,
+      "magnitude_nm": 25000,
+      "direction": "cw"
+    }
+  ],
+  "material": {
+    "type": "isotropic",
+    "elastic_modulus_mpa": 210000,
+    "poissons_ratio": 0.3,
+    "density_g_cm3": 7.85
+  },
+  "notes": "Torsional loading on mast: 25 N·m torque applied at top of vertical cantilever via force couple (radius 5mm). Simulates antenna twist loading from wind or vibration. Tests pure torsional stiffness on slender structure."
+}
